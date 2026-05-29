@@ -1,0 +1,63 @@
+// Launch configurations for debugging RP2040 cores using Cortex-Debug in
+// VSCode. Each core has its own configuration, allowing for simultaneous
+// debugging of both cores. Semihosting is assumed for stdio and file I/O.
+//
+// Note 1:
+// This expects OpenOCD to be running separately, configured to listen on ports
+// 3333 and 3334 for cores 0 and 1 respectively. See the README for details on
+// how to set this up.
+//
+// Note 2:
+// You may need to update gdbPath to point to where you installed the Zephyr SDK
+// on your system.
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "RP2040 Core 0",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/core_0/build/zephyr/zephyr.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+
+            // OpenOCD server configuration
+            "servertype": "external",
+            "gdbTarget": ":3333",
+            "gdbPath": "/opt/zephyr-sdk-1.0.1/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
+
+            "preLaunchCommands": [
+                "monitor arm semihosting enable",
+                "monitor arm semihosting_fileio enable",
+            ],
+
+            "runToEntryPoint": "main",
+        },
+
+        {
+            "name": "RP2040 Core 1",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/core_1/build/zephyr/zephyr.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+
+            // OpenOCD server configuration
+            "servertype": "external",
+            "gdbTarget": ":3334",
+            "gdbPath": "/opt/zephyr-sdk-1.0.1/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
+
+            "preLaunchCommands": [
+                "monitor arm semihosting enable",
+                "monitor arm semihosting_fileio enable",
+            ],
+
+            // Set the initial stack pointer and program counter
+            "postLaunchCommands": [
+                "set $sp = *(unsigned int *)0x10100000",
+                "set $pc = *(unsigned int *)0x10100004",
+            ],
+
+            "runToEntryPoint": "main",
+        },
+    ]
+}
