@@ -1,0 +1,6 @@
+# Ignore build directories
+build*/
+
+# IDE configuration
+.vscode/*
+!.vscode/launch.json
