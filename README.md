@@ -12,7 +12,7 @@ On proper AMP microcontrollers I've worked with before, each processor complex
 has its own main memory that can be isolated from all other cores. With the
 RP2040, one has to be careful since both cores share the same flash and RAM
 address space. This means that each core could easily clobber the main memory of
-the other.
+the other. The MPU could be used, but that can also be circumvented.
 
 To get around this, both the flash and the RAM have been divided in half. The
 first halves are assigned to core 0, while the second halves are assigned to
