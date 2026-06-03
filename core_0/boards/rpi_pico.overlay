@@ -6,3 +6,11 @@
 &code_partition {
 	reg = <0x100 (DT_SIZE_M(1) - 0x100)>;
 };
+
+&mbox0 {
+	status = "okay";
+};
+
+&ipm_mbox0 {
+	status = "okay";
+};
